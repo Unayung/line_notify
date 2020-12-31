@@ -18,8 +18,8 @@ module LineNotify
       end
     end
 
-    def revoke(options)
-      request = create_request(options, REVOKE_URI)
+    def revoke
+      request = create_request(nil, REVOKE_URI)
       Net::HTTP.start(REVOKE_URI.hostname, REVOKE_URI.port, use_ssl: REVOKE_URI.scheme == 'https') do |req|
         req.request(request)
       end
@@ -30,7 +30,7 @@ module LineNotify
     def create_request(options, uri)
       request = Net::HTTP::Post.new(uri)
       request['Authorization'] = "Bearer #{@access_token}"
-      request.set_form_data(options)
+      request.set_form_data(options) if options.present?
       request
     end
   end
